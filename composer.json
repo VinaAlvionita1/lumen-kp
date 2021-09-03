@@ -6,7 +6,10 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
-        "laravel/lumen-framework": "^8.0"
+        "firebase/php-jwt": "^5.4",
+        "flipbox/lumen-generator": "^8.2",
+        "laravel/lumen-framework": "^8.0",
+        "tymon/jwt-auth": "^1.0.0-beta.3@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

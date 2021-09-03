@@ -16,3 +16,12 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api'], function() use($router){
+    $router->get('akun', 'AdminController@akun');
+    $router->post('register', 'AdminController@daftar');
+    $router->post('login', 'AdminController@login');
+    $router->get('aktif', 'AdminController@aktif');
+    $router->post('logout', 'AdminController@logout');
+    $router->get('home', 'HomeController@index');
+});

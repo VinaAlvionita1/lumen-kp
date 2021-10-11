@@ -24,4 +24,25 @@ $router->group(['prefix' => 'api'], function() use($router){
     $router->get('aktif', 'AdminController@aktif');
     $router->post('logout', 'AdminController@logout');
     $router->get('home', 'HomeController@index');
+
+    //Karyawan
+    $router->get('karyawan', 'KaryawanController@index');
+    $router->post('karyawan', 'KaryawanController@store');
+    $router->put('karyawan/{id}', 'KaryawanController@update');
+    $router->delete('karyawan/{id}', 'KaryawanController@destroy');
+
+    //Proyek
+    $router->get('proyek', 'ProyekController@index');
+    $router->post('proyek', 'ProyekController@store');
+    $router->put('proyek/{id}', 'ProyekController@update');
+    $router->delete('proyek/{id}', 'ProyekController@destroy');
+
+    //Milestone
+    $router->get('milestone', 'MilestoneController@index');
+    $router->post('milestone', 'MilestoneController@store');
+    $router->put('milestone/{id}', 'MilestoneController@update');
+    $router->delete('milestone/{id}', 'MilestoneController@destroy');
+
+    //Jabatan
+    $router->get('jabatan', 'JabatanController@index');
 });

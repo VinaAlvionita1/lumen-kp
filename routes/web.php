@@ -43,6 +43,20 @@ $router->group(['prefix' => 'api'], function() use($router){
     $router->put('milestone/{id}', 'MilestoneController@update');
     $router->delete('milestone/{id}', 'MilestoneController@destroy');
 
-    //Jabatan
+    //Jabatan, Status, Kategori
     $router->get('jabatan', 'JabatanController@index');
+    $router->get('status', 'StatusController@index');
+    $router->get('kategori', 'KategoriController@index');
+
+    //Berkas
+    $router->get('berkas', 'BerkasController@index');
+    $router->post('berkas', 'BerkasController@store');
+    $router->put('berkas/{id}', 'BerkasController@update');
+    $router->delete('berkas/{id}', 'BerkasController@destroy');
+
+    //Tugas
+    $router->get('tugas', 'TugasController@index');
+    $router->post('tugas', 'TugasController@store');
+    $router->put('tugas/{id}', 'TugasController@update');
+    $router->delete('tugas/{id}', 'TugasController@destroy');
 });

@@ -18,8 +18,8 @@ class CreateBerkasTable extends Migration
             $table->unsignedInteger('id_milestone');
             $table->foreign('id_milestone')->references('id_milestone')->on('milestone');
             $table->string('nama_berkas', 255);
-            $table->string('lokasi_penyimpanan', 255);
-            $table->string('keterangan_berkas', 255);
+            $table->string('file', 255);
+            $table->string('keterangan', 255);
             $table->date('tgl_upload');
         });
     }

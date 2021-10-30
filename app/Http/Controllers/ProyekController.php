@@ -29,9 +29,9 @@ class ProyekController extends Controller
         if(request('query')){
             $proyek = Proyek::where('nama_proyek', 'LIKE', '%' . request('query') . '%')
                         ->orWhere('lokasi', 'LIKE', '%' . request('query') . '%')
-                        ->get();
+                        ->paginate(2);
         }else{
-            $proyek = Proyek::all();
+            $proyek = Proyek::paginate(2);
         }
         return response()->json($proyek);
     }

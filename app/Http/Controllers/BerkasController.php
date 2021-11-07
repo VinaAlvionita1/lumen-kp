@@ -59,18 +59,24 @@ class BerkasController extends Controller
             'id_milestone' => 'required',
             'nama_berkas' => 'required',
             'keterangan' => 'required',
-            'file' => 'required',
             'tgl_upload' => 'required'
         ]);
 
-        $brks = Berkas::find($id);
-        $data = $request->only($brks->getFillable());
-        $brks->id_milestone = $data['id_milestone'];
-        $brks->nama_berkas = $data['nama_berkas'];
-        $brks->keterangan = $data['keterangan'];
-        $brks->file = $data['file'];
-        $brks->tgl_upload = $data['tgl_upload'];
-        $brks->save();
+        if($request->file('file')){
+            $name = $request->file('file')->getClientOriginalName();
+            $request->file('file')->move('berkas',$name);
+            var_dump($request);
+
+            $brks = Berkas::find($id);
+            $data = $request->only($brks->getFillable());
+            $brks->id_milestone = $data['id_milestone'];
+            $brks->nama_berkas = $data['nama_berkas'];
+            $brks->keterangan = $data['keterangan'];
+            $brks->file = $name;
+            $brks->tgl_upload = $data['tgl_upload'];
+            $brks->save();
+        }
+
 
         return response()->json($brks);
     }

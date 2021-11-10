@@ -20,7 +20,15 @@ class TugasController extends Controller
 
     public function index()
     {
-        $hasil = DB::select('select * from tugas left join milestone on tugas.id_milestone = milestone.id_milestone left join status on tugas.id_status = status.id_status left join kategori on tugas.id_kategori = kategori.id_kategori left join karyawan on tugas.id_karyawan = karyawan.id_karyawan');
+        // $hasil = DB::select('select * from tugas left join milestone on tugas.id_milestone = milestone.id_milestone left join status on tugas.id_status = status.id_status left join kategori on tugas.id_kategori = kategori.id_kategori left join karyawan on tugas.id_karyawan = karyawan.id_karyawan');
+
+        $hasil = DB::table('tugas')
+        ->leftJoin('milestone', 'tugas.id_milestone', '=', 'milestone.id_milestone')
+        ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
+        ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
+        ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
+        ->get();
+
         return response()->json($hasil);
     }
 
@@ -34,14 +42,14 @@ class TugasController extends Controller
     public function update(Request $request, $id)
     {
         $this -> validate($request, [
-            'id_status' => 'required',
-            'id_milestone' => 'required',
-            'id_karyawan' => 'required',
-            'id_kategori' => 'required',
             'nama_tugas' => 'required',
             'keterangan_tugas' => 'required',
             'tgl_mulai_tugas' => 'required',
-            'tgl_selesai_tugas' => 'required'
+            'tgl_selesai_tugas' => 'required',
+            'id_status' => 'required',
+            'id_milestone' => 'required',
+            'id_karyawan' => 'required',
+            'id_kategori' => 'required'
         ]);
 
         $tgs = Tugas::find($id);

@@ -65,7 +65,7 @@ class BerkasController extends Controller
         if($request->file('file')){
             $name = $request->file('file')->getClientOriginalName();
             $request->file('file')->move('berkas',$name);
-            var_dump($request);
+
 
             $brks = Berkas::find($id);
             $data = $request->only($brks->getFillable());
@@ -75,10 +75,9 @@ class BerkasController extends Controller
             $brks->file = $name;
             $brks->tgl_upload = $data['tgl_upload'];
             $brks->save();
+            return response()->json($brks);
         }
-
-
-        return response()->json($brks);
+        
     }
 
     public function destroy($id)

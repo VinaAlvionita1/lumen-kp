@@ -27,7 +27,7 @@ class TugasController extends Controller
         ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
         ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
         ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
-        ->get();
+        ->paginate(2);
 
         return response()->json($hasil);
     }

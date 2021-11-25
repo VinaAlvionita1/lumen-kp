@@ -75,9 +75,13 @@ class AdminController extends Controller
         ]);
     }
 
+    public function refresh(){
+        // return $this->respondWithToken(Auth::guard()->refresh());
+    }
+
     public function aktif()
     {
-        return response()->json( Auth::guard()->user());
+        return response()->json(Auth::guard()->user());
     }
 
     // public function guard()
@@ -90,8 +94,8 @@ class AdminController extends Controller
         return response()->json([
             'token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 1000000
-        ], 300);
+            'expires_in' => Auth::factory()->getTTL() * 20000000
+        ], 500);
     }
 
 }

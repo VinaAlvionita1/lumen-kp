@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class MilestoneController extends Controller
 {
-    /**
+    public $paginate = 10;
+     /**
      * Create a new controller instance.
      *
      * @return void
@@ -20,7 +21,10 @@ class MilestoneController extends Controller
 
     public function index()
     {
-        $hasil = DB::select('select * from milestone left join proyek on milestone.id_proyek = proyek.id_proyek');
+        // $hasil = DB::select('select * from milestone left join proyek on milestone.id_proyek = proyek.id_proyek');
+        $hasil = DB::table('milestone')
+        ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+        ->paginate(2);
         return response()->json($hasil);
     }
 

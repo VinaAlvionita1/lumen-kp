@@ -21,9 +21,10 @@ class BerkasController extends Controller
     public function index()
     {
         // $hasil = DB::select('select * from berkas left join milestone on berkas.id_milestone = milestone.id_milestone')
+        $limit = intval(\request()->input('limit'));
         $hasil = DB::table('berkas')
         ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
-        ->paginate(2);
+        ->paginate($limit);
         return response()->json($hasil);
     }
 

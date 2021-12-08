@@ -25,13 +25,13 @@ class ProyekController extends Controller
         // $proyek = Proyek::where('nama_proyek', 'LIKE', "%{$query}%")->get();
         // $proyek = Proyek::paginate(1);
         
-
+        $limit = intval(\request()->input('limit'));
         if(request('query')){
             $proyek = Proyek::where('nama_proyek', 'LIKE', '%' . request('query') . '%')
                         ->orWhere('lokasi', 'LIKE', '%' . request('query') . '%')
-                        ->paginate(2);
+                        ->paginate($limit);
         }else{
-            $proyek = Proyek::paginate(2);
+            $proyek = Proyek::paginate($limit);
         }
         return response()->json($proyek);
     }

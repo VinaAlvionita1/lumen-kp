@@ -10,9 +10,4 @@ class Karyawan extends Model
     protected $table = 'karyawan';
     protected $primaryKey = 'id_karyawan';
     protected $fillable = ['id_jabatan', 'nama_karyawan', 'email', 'telp'];
-
-    public function jabatan()
-    {
-        return $this->belongsTo(Jabatan::class, 'id_jabatan');
-    }
 }

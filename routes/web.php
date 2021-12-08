@@ -42,6 +42,7 @@ $router->group(['prefix' => 'api'], function() use($router){
     $router->post('milestone', 'MilestoneController@store');
     $router->put('milestone/{id}', 'MilestoneController@update');
     $router->delete('milestone/{id}', 'MilestoneController@destroy');
+    $router->get('tugasGrafik', 'MilestoneController@tugasGrafik');
 
     //Jabatan, Status, Kategori
     $router->get('jabatan', 'JabatanController@index');

@@ -22,9 +22,32 @@ class MilestoneController extends Controller
     public function index()
     {
         // $hasil = DB::select('select * from milestone left join proyek on milestone.id_proyek = proyek.id_proyek');
-        $hasil = DB::table('milestone')
-        ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
-        ->paginate(2);
+        $limit = intval(\request()->input('limit'));
+        if(request('query')){
+            $hasil = DB::table('milestone')
+            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+            ->where('nama_milestone', 'LIKE', '%' . request('query') . '%')
+            ->paginate($limit);
+        }else{
+            $hasil = DB::table('milestone')
+            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+            ->paginate($limit);
+        }
+        return response()->json($hasil);
+    }
+
+    public function tugasGrafik(){
+        $limit = intval(\request()->input('limit'));
+        if(request('query')){
+            $hasil = DB::table('milestone')
+            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+            ->where('proyek.id_proyek', '=', request('query'))
+            ->paginate($limit);
+        }else{
+            $hasil = DB::table('milestone')
+            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+            ->paginate($limit);
+        }
         return response()->json($hasil);
     }
 

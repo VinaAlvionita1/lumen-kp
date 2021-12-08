@@ -20,7 +20,12 @@ class KaryawanController extends Controller
 
     public function index()
     {
-        $hasil = DB::select('select * from karyawan left join jabatan on karyawan.id_jabatan = jabatan.id_jabatan');
+        $limit = intval(\request()->input('limit'));
+        $hasil = DB::table('karyawan')
+        ->leftJoin('jabatan', 'karyawan.id_jabatan', '=', 'jabatan.id_jabatan')
+        ->paginate($limit);
+        // $hasil = DB::select('select * from karyawan left join jabatan on karyawan.id_jabatan = jabatan.id_jabatan')
+        // ->paginate($limit);
         return response()->json($hasil);
     }
 

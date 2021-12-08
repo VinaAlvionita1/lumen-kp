@@ -21,14 +21,25 @@ class TugasController extends Controller
     public function index()
     {
         // $hasil = DB::select('select * from tugas left join milestone on tugas.id_milestone = milestone.id_milestone left join status on tugas.id_status = status.id_status left join kategori on tugas.id_kategori = kategori.id_kategori left join karyawan on tugas.id_karyawan = karyawan.id_karyawan');
-
-        $hasil = DB::table('tugas')
-        ->leftJoin('milestone', 'tugas.id_milestone', '=', 'milestone.id_milestone')
-        ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
-        ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
-        ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
-        ->paginate(2);
-
+        $limit = intval(\request()->input('limit'));
+        if(request('query')){
+            $hasil = DB::table('tugas')
+            ->leftJoin('milestone', 'tugas.id_milestone', '=', 'milestone.id_milestone')
+            ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
+            ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
+            ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
+            ->where('milestone.id_milestone', '=', request('query'))
+            ->paginate($limit);
+            // $hasil = DB::select('select * from tugas left join milestone on tugas.id_milestone = milestone.id_milestone left join status on tugas.id_status = status.id_status left join kategori on tugas.id_kategori = kategori.id_kategori left join karyawan on tugas.id_karyawan = karyawan.id_karyawan where id_milestone LIKE '%' '.request('query').' '%' ');
+        }else{
+            $hasil = DB::table('tugas')
+            ->leftJoin('milestone', 'tugas.id_milestone', '=', 'milestone.id_milestone')
+            ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
+            ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
+            ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
+            ->paginate($limit);
+        }
+        
         return response()->json($hasil);
     }
 

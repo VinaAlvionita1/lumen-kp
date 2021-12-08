@@ -22,9 +22,22 @@ class BerkasController extends Controller
     {
         // $hasil = DB::select('select * from berkas left join milestone on berkas.id_milestone = milestone.id_milestone')
         $limit = intval(\request()->input('limit'));
+<<<<<<< HEAD
         $hasil = DB::table('berkas')
         ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
         ->paginate($limit);
+=======
+        if(request('query')){
+            $hasil = DB::table('berkas')
+            ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
+            ->where('milestone.id_milestone', '=', request('query'))
+            ->paginate($limit);
+        }else{
+            $hasil = DB::table('berkas')
+            ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
+            ->paginate($limit);
+        }
+>>>>>>> cf1487e1e718f2a9180816e011933ce0e33a7d77
         return response()->json($hasil);
     }
 
@@ -34,7 +47,7 @@ class BerkasController extends Controller
             'id_milestone' => 'required',
             'nama_berkas' => 'required',
             'keterangan' => 'required',
-            'tgl_upload' => 'required'
+            'tgl_upload' => 'required',
         ]);
 
         if($request->file('file')){
@@ -54,6 +67,7 @@ class BerkasController extends Controller
             'file' => $file,
             'tgl_upload' => $tgl_upload,
         ]);
+
         return response()->json($add);
     }
 
@@ -65,23 +79,23 @@ class BerkasController extends Controller
             'keterangan' => 'required',
             'tgl_upload' => 'required'
         ]);
+        
+        $brks = Berkas::find($id);
+        $data = $request->only($brks->getFillable());
 
         if($request->file('file')){
             $name = $request->file('file')->getClientOriginalName();
             $request->file('file')->move('berkas',$name);
-
-
-            $brks = Berkas::find($id);
-            $data = $request->only($brks->getFillable());
-            $brks->id_milestone = $data['id_milestone'];
-            $brks->nama_berkas = $data['nama_berkas'];
-            $brks->keterangan = $data['keterangan'];
             $brks->file = $name;
-            $brks->tgl_upload = $data['tgl_upload'];
-            $brks->save();
-            return response()->json($brks);
         }
-        
+
+        $brks->id_milestone = $data['id_milestone'];
+        $brks->nama_berkas = $data['nama_berkas'];
+        $brks->keterangan = $data['keterangan'];
+        $brks->tgl_upload = $data['tgl_upload'];
+        $brks->save();
+
+        return response()->json($brks);
     }
 
     public function destroy($id)

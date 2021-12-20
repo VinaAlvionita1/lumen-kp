@@ -75,7 +75,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function refresh(){
+    public function tokenLagi(){
         // return $this->respondWithToken(Auth::guard()->refresh());
     }
 

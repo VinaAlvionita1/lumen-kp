@@ -37,16 +37,40 @@ class MilestoneController extends Controller
     }
 
     public function tugasGrafik(){
-        $limit = intval(\request()->input('limit'));
-        if(request('query')){
-            $hasil = DB::table('milestone')
-            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
-            ->where('proyek.id_proyek', '=', request('query'))
-            ->paginate($limit);
-        }else{
-            $hasil = DB::table('milestone')
-            ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
-            ->paginate($limit);
+        // $limit = intval(\request()->input('limit'));
+        // if(request('query')){
+        //     $hasil = DB::table('milestone')
+        //     ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+        //     ->where('proyek.id_proyek', '=', request('query'))
+        //     ->paginate($limit);
+        // }else{
+        //     $hasil = DB::table('milestone')
+        //     ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+        //     ->paginate($limit);
+        // }
+        // return response()->json($hasil);
+        
+        $hasil = [];
+        $milestone = DB::select('select * from milestone where id_proyek = ?', [request()->input('query')]);
+        if(!empty($milestone)){
+            foreach($milestone as $m){
+                $mi['milestone'] = [
+                    'nama_milestone' => $m->nama_milestone,
+                    'status' => 0,
+                    'task' => []
+                ];
+            }
+            $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
+            if(!empty($task)){
+                foreach($task as $t){
+                    $mi['task'][] = [
+                        'nama_tugas' => $t->nama_tugas,
+                        'status' => $t->id_status
+                    ];
+                    $mi['status'] = $t->id_status;
+                }
+            }
+            $hasil[] = $mi;
         }
         return response()->json($hasil);
     }

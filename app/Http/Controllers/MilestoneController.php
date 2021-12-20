@@ -54,23 +54,23 @@ class MilestoneController extends Controller
         $milestone = DB::select('select * from milestone where id_proyek = ?', [request()->input('query')]);
         if(!empty($milestone)){
             foreach($milestone as $m){
-                $mi['milestone'] = [
+                $mi = [
                     'nama_milestone' => $m->nama_milestone,
                     'status' => 0,
                     'task' => []
                 ];
-            }
-            $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
-            if(!empty($task)){
-                foreach($task as $t){
-                    $mi['task'][] = [
-                        'nama_tugas' => $t->nama_tugas,
-                        'status' => $t->id_status
-                    ];
-                    $mi['status'] = $t->id_status;
+                $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
+                if(!empty($task)){
+                    foreach($task as $t){
+                        $mi['task'][] = [
+                            'nama_tugas' => $t->nama_tugas,
+                            'status' => $t->id_status
+                        ];
+                        $mi['status'] = $t->id_status;
+                    }
                 }
+                $hasil[] = $mi;
             }
-            $hasil[] = $mi;
         }
         return response()->json($hasil);
     }

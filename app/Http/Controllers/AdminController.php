@@ -76,7 +76,7 @@ class AdminController extends Controller
     }
 
     public function tokenLagi(){
-        // return $this->respondWithToken(Auth::guard()->refresh());
+        return $this->respondWithToken(Auth::refresh());
     }
 
     public function aktif()
@@ -84,10 +84,10 @@ class AdminController extends Controller
         return response()->json(Auth::guard()->user());
     }
 
-    // public function guard()
-    // {
-    //     return Auth::guard();
-    // }
+    public function guard()
+    {
+        return Auth::guard();
+    }
 
     protected function respondWithToken($token)
     {

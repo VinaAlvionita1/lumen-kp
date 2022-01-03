@@ -60,4 +60,10 @@ $router->group(['prefix' => 'api'], function() use($router){
     $router->post('tugas', 'TugasController@store');
     $router->put('tugas/{id}', 'TugasController@update');
     $router->delete('tugas/{id}', 'TugasController@destroy');
+
+    //Notif
+    $router->get('notif', 'NotifController@index');
+
+    //GantChart
+    $router->get('gantchart', 'TugasController@GantChart');
 });

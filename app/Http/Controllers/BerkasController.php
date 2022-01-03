@@ -22,11 +22,9 @@ class BerkasController extends Controller
     {
         // $hasil = DB::select('select * from berkas left join milestone on berkas.id_milestone = milestone.id_milestone')
         $limit = intval(\request()->input('limit'));
-<<<<<<< HEAD
         $hasil = DB::table('berkas')
         ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
         ->paginate($limit);
-=======
         if(request('query')){
             $hasil = DB::table('berkas')
             ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
@@ -37,7 +35,6 @@ class BerkasController extends Controller
             ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
             ->paginate($limit);
         }
->>>>>>> cf1487e1e718f2a9180816e011933ce0e33a7d77
         return response()->json($hasil);
     }
 

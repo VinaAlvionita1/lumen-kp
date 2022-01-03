@@ -83,4 +83,49 @@ class TugasController extends Controller
         $hapus = Tugas::destroy($id);
         return response()->json($hapus);
     }
+
+    public function GantChart(){
+        $hasil = [];
+        $milestone = DB::select('select * from milestone where id_milestone = ?', [request()->input('query')]);
+        if(!empty($milestone)){
+            foreach($milestone as $m){
+                $mi = [
+                    'nama_milestone' => $m->nama_milestone,
+                    'task' => []
+                ];
+                $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
+                if(!empty($task)){
+                    foreach($task as $t){
+                        $mi['task'][] = [
+                            'nama_tugas' => $t->nama_tugas,
+                            'tgl_mulai_tugas' => $t->tgl_mulai_tugas,
+                            'tgl_selesai_tugas' => $t->tgl_selesai_tugas,
+                        ];
+                    }
+                }
+                $hasil[] = $mi;
+            }
+        }
+        else{
+            $milestone = DB::select('select * from milestone ORDER BY id_milestone DESC LIMIT 1');
+            foreach($milestone as $m){
+                $mi = [
+                    'nama_milestone' => $m->nama_milestone,
+                    'task' => []
+                ];
+                $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
+                if(!empty($task)){
+                    foreach($task as $t){
+                        $mi['task'][] = [
+                            'nama_tugas' => $t->nama_tugas,
+                            'tgl_mulai_tugas' => $t->tgl_mulai_tugas,
+                            'tgl_selesai_tugas' => $t->tgl_selesai_tugas,
+                        ];
+                    }
+                }
+                $hasil[] = $mi;
+            }
+        }
+        return response()->json($hasil);
+    }
 }

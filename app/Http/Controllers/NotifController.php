@@ -25,15 +25,16 @@ class NotifController extends Controller
     public function index()
     {
         $output = [];
-        $proyek = DB::select('select * from proyek');
+        $proyek = DB::select('select * from tugas left join karyawan on tugas.id_karyawan = karyawan.id_karyawan');
         if(!empty($proyek)){
             foreach ($proyek as $a) {
                 $data = [
-                    'nama_proyekk' => $a->nama_proyek,
-                    'tgl_selesai_proyek' => $a->tgl_selesai_proyek,
+                    'nama_tugas' => $a->nama_tugas,
+                    'tgl_selesai_tugas' => $a->tgl_selesai_tugas,
+                    'nama_karyawan' => $a->nama_karyawan,
                     'notification' => []
                 ];
-                $tgl_selesai = date('Y-m-d', strtotime($a->tgl_selesai_proyek));
+                $tgl_selesai = date('Y-m-d', strtotime($a->tgl_selesai_tugas));
                 $now = date('Y-m-d', strtotime("now"));
                 $selisih = date('Y-m-d', strtotime('-7 days', strtotime($tgl_selesai)));
                 $h1 = date('Y-m-d', strtotime('-1 days', strtotime($tgl_selesai)));
@@ -51,7 +52,7 @@ class NotifController extends Controller
                             'h-7' => $selisih,
                             'h-1' => $h1,
                             'perbedaan' => $x,
-                            'pesan' => $a->nama_proyek . " Kurang " .$x. " Hari Deadline Proyek!",
+                            'pesan' => $a->nama_tugas . " Kurang " .$x. " Hari Deadline Tugas Dengan Penanggung Jawab " .$a->nama_karyawan. " !",
                         ];
                         $output[] = $hasil;
                     }
@@ -63,7 +64,7 @@ class NotifController extends Controller
                         'h-7' => $selisih,
                         'h-1' => $h1,
                         'perbedaan' => $x,
-                        'pesan' => $a->nama_proyek . " Hari Ini Deadline Proyek!",
+                        'pesan' => $a->nama_tugas . " Hari Ini Deadline Tugas Dengan Penanggung Jawab " .$a->nama_karyawan. " !",
                     ];
                     $output[] = $hasil;
                 }

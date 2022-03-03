@@ -54,16 +54,22 @@ $router->group(['prefix' => 'api'], function() use($router){
     $router->post('berkas', 'BerkasController@store');
     $router->put('berkas/{id}', 'BerkasController@update');
     $router->delete('berkas/{id}', 'BerkasController@destroy');
+    $router->get('linkberkas', 'BerkasController@linkberkas');
 
     //Tugas
     $router->get('tugas', 'TugasController@index');
     $router->post('tugas', 'TugasController@store');
     $router->put('tugas/{id}', 'TugasController@update');
     $router->delete('tugas/{id}', 'TugasController@destroy');
+    $router->get('pilihProyek', 'TugasController@pilihProyek');
 
     //Notif
     $router->get('notif', 'NotifController@index');
 
     //GantChart
     $router->get('gantchart', 'TugasController@GantChart');
+
+    //Rekap
+    $router->get('rekap', 'RekapController@pilihTahun');
+
 });

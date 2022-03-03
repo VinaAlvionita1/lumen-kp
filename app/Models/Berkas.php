@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Berkas extends Model
 {
     public $timestamps = false;
-    protected $table = 'berkas';
+    protected $table = 'dokumen';
     protected $primaryKey = 'id_berkas';
-    protected $fillable = ['id_milestone', 'nama_berkas', 'file', 'keterangan', 'tgl_upload'];
+    protected $fillable = ['id_milestone', 'nama_berkas', 'file', 'link', 'keterangan', 'tgl_upload'];
 }

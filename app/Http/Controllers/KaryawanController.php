@@ -58,7 +58,13 @@ class KaryawanController extends Controller
 
     public function destroy($id)
     {
-        $hapus = Karyawan::destroy($id);
+        $hasil = DB::select('select * from tugas where id_karyawan = ?', [$id]);
+        if(!empty($hasil)){
+            $hapus = "Data Tidak Dapat Dihapus, Dikarenakan Bertanggung Jawab Atas Beberapa Tugas!";
+            echo "$hapus";
+        }else{
+            $hapus = Karyawan::destroy($id);
+        }
         return response()->json($hapus);
     }
 }

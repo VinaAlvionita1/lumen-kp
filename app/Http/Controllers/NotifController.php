@@ -52,6 +52,7 @@ class NotifController extends Controller
                             'h-7' => $selisih,
                             'h-1' => $h1,
                             'perbedaan' => $x,
+                            'nama_tugas' => $a->nama_tugas,
                             'pesan' => $a->nama_tugas . " Kurang " .$x. " Hari Deadline Tugas Dengan Penanggung Jawab " .$a->nama_karyawan. " !",
                         ];
                         $output[] = $hasil;
@@ -64,6 +65,7 @@ class NotifController extends Controller
                         'h-7' => $selisih,
                         'h-1' => $h1,
                         'perbedaan' => $x,
+                        'nama_tugas' => $a->nama_tugas,
                         'pesan' => $a->nama_tugas . " Hari Ini Deadline Tugas Dengan Penanggung Jawab " .$a->nama_karyawan. " !",
                     ];
                     $output[] = $hasil;

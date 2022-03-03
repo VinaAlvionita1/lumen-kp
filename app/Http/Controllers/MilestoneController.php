@@ -27,10 +27,12 @@ class MilestoneController extends Controller
             $hasil = DB::table('milestone')
             ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
             ->where('nama_milestone', 'LIKE', '%' . request('query') . '%')
+            ->orderBy('id_milestone', 'DESC')
             ->paginate($limit);
         }else{
             $hasil = DB::table('milestone')
             ->leftJoin('proyek', 'milestone.id_proyek', '=', 'proyek.id_proyek')
+            ->orderBy('id_milestone', 'DESC')
             ->paginate($limit);
         }
         return response()->json($hasil);
@@ -77,9 +79,23 @@ class MilestoneController extends Controller
 
     public function store(Request $request)
     {
-       $add = Milestone::create($request->all());
+    $this -> validate($request, [
+        'nama_milestone' => 'required',
+        'id_proyek' => 'required',
+    ]);
 
-        return response()->json($add);
+    $milestone = new Milestone();
+    $milestone->nama_milestone = $request['nama_milestone'];
+    $milestone->id_proyek = $request['id_proyek'];
+    $hasil = DB::select('select * from milestone where nama_milestone = ?', [$request['nama_milestone']]);
+    if(!empty($hasil)){
+        $milestone = "Data Sudah Ada!";
+        echo "$milestone";
+    }else{
+        $milestone->save();
+    }
+
+    return response()->json($milestone);
     }
 
     public function update(Request $request, $id)
@@ -100,7 +116,13 @@ class MilestoneController extends Controller
 
     public function destroy($id)
     {
-        $hapus = Milestone::destroy($id);
+        $hasil = DB::select('select * from tugas where id_milestone = ?', [$id]);
+        if(!empty($hasil)){
+            $hapus = "Data Tidak Dapat Dihapus, Dikarenakan Terdapat Tugas Didalamnya!";
+            echo "$hapus";
+        }else{
+            $hapus = Milestone::destroy($id);
+        }
         return response()->json($hapus);
     }
 }

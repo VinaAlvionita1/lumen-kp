@@ -22,17 +22,19 @@ class BerkasController extends Controller
     {
         // $hasil = DB::select('select * from berkas left join milestone on berkas.id_milestone = milestone.id_milestone')
         $limit = intval(\request()->input('limit'));
-        $hasil = DB::table('berkas')
-        ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
+        $hasil = DB::table('dokumen')
+        ->leftJoin('milestone', 'dokumen.id_milestone', '=', 'milestone.id_milestone')
         ->paginate($limit);
         if(request('query')){
-            $hasil = DB::table('berkas')
-            ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
+            $hasil = DB::table('dokumen')
+            ->leftJoin('milestone', 'dokumen.id_milestone', '=', 'milestone.id_milestone')
             ->where('milestone.id_milestone', '=', request('query'))
+            ->orderBy('tgl_upload', 'DESC')
             ->paginate($limit);
         }else{
-            $hasil = DB::table('berkas')
-            ->leftJoin('milestone', 'berkas.id_milestone', '=', 'milestone.id_milestone')
+            $hasil = DB::table('dokumen')
+            ->leftJoin('milestone', 'dokumen.id_milestone', '=', 'milestone.id_milestone')
+            ->orderBy('tgl_upload', 'DESC')
             ->paginate($limit);
         }
         return response()->json($hasil);
@@ -47,7 +49,7 @@ class BerkasController extends Controller
             'tgl_upload' => 'required',
         ]);
 
-        if($request->file('file')){
+        if($request->file('file') && $request->file('link')){
             $name = $request->file('file')->getClientOriginalName();
             $request->file('file')->move('berkas',$name);
 
@@ -55,6 +57,7 @@ class BerkasController extends Controller
             $nama_berkas = $request['nama_berkas'];
             $keterangan = $request['keterangan'];
             $file = $name;
+            $link = url('berkas'.'/'.$name);
             $tgl_upload = $request['tgl_upload'];
         }
         $add = Berkas::create([
@@ -62,6 +65,7 @@ class BerkasController extends Controller
             'nama_berkas' => $nama_berkas,
             'keterangan' => $keterangan,
             'file' => $file,
+            'link' => $link,
             'tgl_upload' => $tgl_upload,
         ]);
 
@@ -84,6 +88,7 @@ class BerkasController extends Controller
             $name = $request->file('file')->getClientOriginalName();
             $request->file('file')->move('berkas',$name);
             $brks->file = $name;
+            $brks->link = url('berkas'.'/'.$name);
         }
 
         $brks->id_milestone = $data['id_milestone'];
@@ -100,4 +105,5 @@ class BerkasController extends Controller
         $hapus = Berkas::destroy($id);
         return response()->json($hapus);
     }
+
 }

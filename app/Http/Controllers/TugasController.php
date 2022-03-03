@@ -28,7 +28,9 @@ class TugasController extends Controller
             ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
             ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
             ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
-            ->where('milestone.id_milestone', '=', request('query'))
+            ->where('milestone.nama_milestone', 'LIKE', '%' . request('query') . '%')
+            ->orWhere('nama_tugas', '=', request('query'))
+            ->orderBy('tgl_mulai_tugas', 'DESC')
             ->paginate($limit);
             // $hasil = DB::select('select * from tugas left join milestone on tugas.id_milestone = milestone.id_milestone left join status on tugas.id_status = status.id_status left join kategori on tugas.id_kategori = kategori.id_kategori left join karyawan on tugas.id_karyawan = karyawan.id_karyawan where id_milestone LIKE '%' '.request('query').' '%' ');
         }else{
@@ -37,6 +39,7 @@ class TugasController extends Controller
             ->leftJoin('status', 'tugas.id_status', '=', 'status.id_status')
             ->leftJoin('kategori', 'tugas.id_kategori', '=', 'kategori.id_kategori')
             ->leftJoin('karyawan', 'tugas.id_karyawan', '=', 'karyawan.id_karyawan')
+            ->orderBy('tgl_mulai_tugas', 'DESC')
             ->paginate($limit);
         }
         
@@ -84,6 +87,39 @@ class TugasController extends Controller
         return response()->json($hapus);
     }
 
+    public function pilihProyek(){
+        $hasil = [];
+        $proyek = DB::select('select * from proyek where id_proyek = ?', [request()->input('cari')]);
+        if(!empty($proyek)){
+            foreach($proyek as $p){
+                $pr = [
+                    'nama_proyek' => $p->nama_proyek
+                ];
+                $mlst = DB::select('select * from milestone where id_proyek = ?', [$p->id_proyek]);
+                if(!empty($mlst)){
+                    foreach($mlst as $t){
+                        if('id_milestone' == $t->id_milestone){
+
+                        }else{
+                            $pr['mlst'][] = [
+                                'id_milestone' => $t->id_milestone,
+                                'nama_milestone' => $t->nama_milestone,
+                            ];
+                        }
+                    }
+                }
+                $hasil[] = $pr;
+            }
+        }
+        else{
+            $mi = [
+                'nama_milestone' => 'Tidak Ada Proyek Yang Dipilih'
+            ];
+            $hasil[] = $mi;
+        }
+        return response()->json($hasil);
+    }
+
     public function GantChart(){
         $hasil = [];
         $milestone = DB::select('select * from milestone where id_milestone = ?', [request()->input('query')]);
@@ -107,24 +143,11 @@ class TugasController extends Controller
             }
         }
         else{
-            $milestone = DB::select('select * from milestone ORDER BY id_milestone DESC LIMIT 1');
-            foreach($milestone as $m){
-                $mi = [
-                    'nama_milestone' => $m->nama_milestone,
-                    'task' => []
-                ];
-                $task = DB::select('select * from tugas where id_milestone = ?', [$m->id_milestone]);
-                if(!empty($task)){
-                    foreach($task as $t){
-                        $mi['task'][] = [
-                            'nama_tugas' => $t->nama_tugas,
-                            'tgl_mulai_tugas' => $t->tgl_mulai_tugas,
-                            'tgl_selesai_tugas' => $t->tgl_selesai_tugas,
-                        ];
-                    }
-                }
-                $hasil[] = $mi;
-            }
+            $mi = [
+                'nama_milestone' => 'Tidak Ada Milestone Yang Dipilih'
+            ];
+            
+            $hasil[] = $mi;
         }
         return response()->json($hasil);
     }
